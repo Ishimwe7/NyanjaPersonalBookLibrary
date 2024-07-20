@@ -9,18 +9,18 @@ export interface Book {
 export interface RootState {
   books: {
     items: Book[];
-    status: 'idle' | 'loading' | 'succeeded' | 'failed';
+    status: "idle" | "loading" | "succeeded" | "failed";
     error: string | null;
   };
   settings: {
-    sortBy: 'title' | 'author' | 'rating';
-    theme: 'light' | 'dark';
+    sortBy: "title" | "author" | "rating";
+    theme: "light" | "dark";
   };
 }
 
 export type RootStackParamList = {
   Home: undefined;
-  BookDetail: { bookId: number };
+  BookDetail: { bookId: string };
   AddBook: undefined;
   Settings: undefined;
 };

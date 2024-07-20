@@ -9,8 +9,20 @@ import { useTheme } from '@react-navigation/native';
 import Books from './Books';
 import AddBook from './AddBook';
 import SettingsScreen from './Settings';
+import { createStackNavigator } from '@react-navigation/stack';
+import BookDetail from './BookDetails';
 
 const Tab = createBottomTabNavigator<TabParamList>();
+const Stack = createStackNavigator();
+
+const BookStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="All Books" component={Books} />
+      <Stack.Screen name="Book Details" component={BookDetail} />
+    </Stack.Navigator>
+  );
+};
 
 const CustomHeader: React.FC = () => {
   const navigation = useNavigation<NavigationProps>();
@@ -46,9 +58,9 @@ export default function TabBasedNavigation() {
           let iconName: string;
 
           if (route.name === 'Books') {
-            iconName = focused ? 'person-add' : 'person-add-outline';
+            iconName = focused ? 'book' : 'book-outline';
           } else if (route.name === 'AddBook') {
-            iconName = focused ? 'log-in' : 'log-in-outline';
+            iconName = focused ? 'add-circle' : 'add-circle-outline';
           }else if (route.name === 'Settings') {
             iconName = focused ? 'settings-outline' : 'settings-outline';
           }
@@ -60,11 +72,6 @@ export default function TabBasedNavigation() {
         },
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
-        // tabBarActiveTintColor: theme ? '#ff6347' : '#0066FF', // Tomato or Blue
-        // tabBarInactiveTintColor: theme.dark ? '#b0c4de' : '#b0c4de', // LightSteelBlue
-        // tabBarStyle: {
-        //   backgroundColor: theme.dark ? '#333' : '#f5f5f5', // Dark or Light background color
-        // },
         headerShown: true,
         headerTitle: '',
         headerLeft: () => <CustomHeader />,
@@ -72,7 +79,7 @@ export default function TabBasedNavigation() {
     >
       <Tab.Screen
         name="Books"
-        component={Books}
+        component={BookStack}
         options={{ tabBarLabel: 'Books' }}
       />
       <Tab.Screen

@@ -4,6 +4,7 @@ import { TextInput, Button, Switch, Text, Snackbar } from 'react-native-paper';
 import { useAppDispatch } from '../redux/hooks/reduxHooks';
 import { addBook } from '../redux/slices/bookSlice'
 import { useNavigation } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 const AddBook: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -13,22 +14,34 @@ const AddBook: React.FC = () => {
   const [author, setAuthor] = useState('');
   const [rating, setRating] = useState('');
   const [isRead, setIsRead] = useState(false);
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-
-  const handleAddBook = () => {
+ 
+  const handleAddBook = async () => {
     if (title && author && rating) {
-      dispatch(addBook({
-        title,
-        author,
-        rating: parseInt(rating, 10),
-        isRead,
-      }));
-      setSnackbarVisible(true);
-      // Reset form
-      setTitle('');
-      setAuthor('');
-      setRating('');
-      setIsRead(false);
+      try {
+        await dispatch(addBook({
+          title,
+          author,
+          rating: parseInt(rating, 10),
+          isRead,
+        })).unwrap();
+        Toast.show({
+          type: 'success',
+          text1: 'Book added successfully!',
+          position: 'bottom',
+          onHide: () => navigation.goBack(),
+        });
+        setTitle('');
+        setAuthor('');
+        setRating('');
+        setIsRead(false);
+      } catch (error) {
+        console.error('Failed to add book:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Failed to add book',
+          position: 'bottom',
+        });
+      }
     }
   };
 
@@ -60,17 +73,7 @@ const AddBook: React.FC = () => {
       <Button mode="contained" onPress={handleAddBook} style={styles.button}>
         Add Book
       </Button>
-      <Snackbar
-        visible={snackbarVisible}
-        onDismiss={() => setSnackbarVisible(false)}
-        duration={3000}
-        action={{
-          label: 'OK',
-          onPress: () => navigation.goBack(),
-        }}
-      >
-        Book added successfully!
-      </Snackbar>
+      <Toast />
     </ScrollView>
   );
 };
