@@ -10,15 +10,31 @@ interface BookItemProps {
 }
 
 const BookItem: React.FC<BookItemProps> = ({ book, onPress }) => {
+    const renderStars = (rating: number) => {
+    const stars = [];
+     for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <Text
+          key={i}
+          style={[styles.star, { color: i <= rating ? 'gold' : 'gray' }]} 
+        >
+          ★
+        </Text>
+      );
+    }
+    return stars;
+  };
   return (
     <TouchableOpacity onPress={onPress}>
       <Card style={styles.card}>
+        {book.image && <Card.Cover source={{ uri: book.image }} style={styles.cover} />}
         <Card.Content>
           <Text style={styles.title}>{book.title}</Text>
           <Paragraph>by {book.author}</Paragraph>
           <View style={styles.ratingContainer}>
-            <IconButton icon="star" size={16} />
-            <Text>{book.rating}/5</Text>
+            {/* <IconButton icon="star" size={16} /> */}
+             {renderStars(book.rating)}
+            {/* <Text>{book.rating}/5</Text> */}
           </View>
           <Text style={styles.readStatus}>
             {book.isRead ? 'Read' : 'Unread'}
@@ -34,6 +50,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginVertical: 8,
   },
+  cover: {
+    height: 150,
+  },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -45,6 +64,10 @@ const styles = StyleSheet.create({
   readStatus: {
     marginTop: 8,
     fontStyle: 'italic',
+  },
+   star: {
+     marginHorizontal: 2,
+     fontSize: 26
   },
 });
 

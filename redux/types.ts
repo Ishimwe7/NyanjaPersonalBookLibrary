@@ -4,6 +4,7 @@ export interface Book {
   author: string;
   rating: number;
   isRead: boolean;
+  image: string | null;
 }
 
 export interface RootState {

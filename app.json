@@ -27,7 +27,13 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+        [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app needs access to your photos to allow you to upload images of books."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

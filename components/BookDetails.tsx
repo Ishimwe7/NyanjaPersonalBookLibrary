@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import { Text, Button, Dialog, Portal, TextInput, Switch } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../redux/hooks/reduxHooks';
 import { deleteBook, readBook, updateBook } from '../redux/slices/bookSlice';
@@ -21,6 +21,7 @@ const BookDetail: React.FC = () => {
   const [title, setTitle] = useState(book?.title || '');
   const [author, setAuthor] = useState(book?.author || '');
   const [rating, setRating] = useState(book?.rating || 0);
+  const [image, setImage] = useState(book?.image || '');
   const [isRead, setIsRead] = useState(book?.isRead || false);
   const [titleError, setTitleError] = useState<string | null>(null);
   const [authorError, setAuthorError] = useState<string | null>(null);
@@ -65,7 +66,7 @@ const BookDetail: React.FC = () => {
 const handleSave = () => {
     if (validateInputs()) {
       if (book) {
-        dispatch(updateBook({ id: book.id, title, author, rating, isRead }))
+        dispatch(updateBook({ id: book.id, title, author, rating, isRead,image }))
           .unwrap()
           .then(() => {
             Toast.show({
@@ -101,6 +102,7 @@ const handleSave = () => {
 
   return (
     <View style={styles.container}>
+       {book.image && <Image source={{ uri: book.image }} style={styles.image} />}
       <Text style={styles.title}>{book.title}</Text>
       <Text style={styles.author}>by {book.author}</Text>
       <Text style={styles.rating}>Rating: {book.rating}/5</Text>
@@ -210,6 +212,12 @@ const styles = StyleSheet.create({
    errorText: {
     color: 'red',
     marginBottom: 8,
+  },
+    image: {
+    width: 100,
+    height: 100,
+    marginVertical: 16,
+    alignSelf: 'center',
   },
 });
 
