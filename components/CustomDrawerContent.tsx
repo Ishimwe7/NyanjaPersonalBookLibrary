@@ -23,19 +23,19 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
         <Text style={styles[theme].nameText}>Eng.Nyanja</Text>
       </View>
       <DrawerItem
-        label="Sign Up"
+        label="All Books"
         icon={({ color, size }) => (
-          <Icon name="person-add-outline" color={styles[theme].iconColor.color} size={size} />
+          <Icon name="book-outline" color={styles[theme].iconColor.color} size={size} />
         )}
-        onPress={() => props.navigation.navigate('Registration')}
+        onPress={() => props.navigation.navigate('All Books')}
          labelStyle={styles[theme].drawerItemLabel}
       />
       <DrawerItem
-        label="Sign In"
+        label="Add Book"
         icon={({ color, size }) => (
-          <Icon name="log-in-outline" color={styles[theme].iconColor.color} size={size} />
+          <Icon name="add-circle-outline" color={styles[theme].iconColor.color} size={size} />
         )}
-        onPress={() => props.navigation.navigate('Login')}
+        onPress={() => props.navigation.navigate('AddBook')}
          labelStyle={styles[theme].drawerItemLabel}
       />
       <DrawerItem

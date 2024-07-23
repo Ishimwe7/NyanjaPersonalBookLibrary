@@ -5,8 +5,8 @@ import { useNavigation, DrawerActions } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { TabParamList, NavigationProps } from './types';
-import { useTheme } from '@react-navigation/native';
-import Books from './Books';
+//import Books from './Books';
+import BookList from './Books';
 import AddBook from './AddBook';
 import SettingsScreen from './Settings';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -14,11 +14,10 @@ import BookDetail from './BookDetails';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 const Stack = createStackNavigator();
-
 const BookStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="All Books" component={Books} />
+      <Stack.Screen name="All Books" component={BookList} />
       <Stack.Screen name="Book Details" component={BookDetail} />
     </Stack.Navigator>
   );
@@ -26,30 +25,18 @@ const BookStack = () => {
 
 const CustomHeader: React.FC = () => {
   const navigation = useNavigation<NavigationProps>();
-  const theme = useTheme();
 
   return (
     <TouchableOpacity
       onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
       style={{ marginLeft: 10 }}
     >
-      <Icon name={Platform.OS === 'ios' ? 'ios-menu' : 'menu'} size={30} color={'#222'} />
+      <Icon name={Platform.OS === 'ios' ? 'ios-menu' : 'menu'} size={30} color={'#222'}  />
     </TouchableOpacity>
   );
 };
 
 export default function TabBasedNavigation() {
- // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const theme = useTheme();
-
-  // const handleLogin = () => {
-  //   setIsLoggedIn(true);
-  // };
-
-  // const handleLogout = (navigation: NavigationProps) => {
-  //   setIsLoggedIn(false);
-  //   navigation.navigate('Login');
-  // };
 
   return (
     <Tab.Navigator
@@ -72,7 +59,6 @@ export default function TabBasedNavigation() {
         },
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
-        headerShown: true,
         headerTitle: '',
         headerLeft: () => <CustomHeader />,
       })}

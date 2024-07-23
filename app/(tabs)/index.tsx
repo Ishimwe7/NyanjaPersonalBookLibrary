@@ -4,11 +4,9 @@ import { DrawerProvider } from '@/components/drawerContext';
 import AppNavigator from '@/components/AppNavigator';
 import { useAppDispatch } from '@/redux/hooks/reduxHooks';
 import { fetchBooks } from '@/redux/slices/bookSlice';
-//import { initDatabase } from '@/data-persistance/dbservice';
 import { getDBConnection } from '@/data-persistance/sqliteconfig';
 import { Provider as PaperProvider } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
-import StackNavigator from '@/components/stackNavigator';
 export default function App() {
 
    const dispatch = useAppDispatch();
@@ -17,14 +15,15 @@ export default function App() {
     try {
       console.log("Starting database initialization");
       await getDBConnection();
-        console.log("Database initialized successfully");
+      console.log("Database initialized successfully");
+      dispatch(fetchBooks());
     } catch (error) {
         console.error('Failed to initialize database:', error);
     }
   };
 
   initDB();
-}, []);
+}, [dispatch]);
   
   return ( 
     <PaperProvider>

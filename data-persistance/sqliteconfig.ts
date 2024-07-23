@@ -3,6 +3,7 @@ import { Book } from "@/redux/types";
 // Function to get the database connection
 export const getDBConnection = async () => {
   const db = await SQLite.openDatabaseAsync("nyanja.books");
+  //await db.execAsync("DROP TABLE IF EXISTS books");
   await db.execAsync(`
     PRAGMA journal_mode = WAL;
     CREATE TABLE IF NOT EXISTS books (
@@ -10,28 +11,20 @@ export const getDBConnection = async () => {
       title TEXT NOT NULL,
       author TEXT NOT NULL,
       rating INTEGER,
-      isRead BOOLEAN
+      isRead BOOLEAN,
+      image TEXT
     );
   `);
   return db;
 };
 
-// Function to insert a book into the database
-// const addBook = async (book: Book) => {
-//   const db = await getDBConnection();
-//   const result = await db.runAsync(
-//     "INSERT INTO books (title, author, rating, isRead) VALUES (?, ?, ?, ?)",
-//     [book.title, book.author, book.rating, book.isRead]
-//   );
-//   console.log("Book added with ID:", result.lastInsertRowId);
-// };
 const addBook = async (book) => {
   try {
     const db = await getDBConnection();
-    const { title, author, rating, isRead } = book;
+    const { title, author, rating, isRead, image } = book;
     const result = await db.runAsync(
-      "INSERT INTO books (title, author, rating, isRead) VALUES (?, ?, ?, ?)",
-      [title, author, rating, isRead]
+      "INSERT INTO books (title, author, rating, isRead, image) VALUES (?, ?, ?, ?,?)",
+      [title, author, rating, isRead, image]
     );
     return result.lastInsertRowId;
   } catch (error) {

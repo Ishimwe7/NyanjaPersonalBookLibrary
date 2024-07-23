@@ -31,9 +31,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     };
     loadTheme();
   }, []);
-  // const toggleTheme = () => {
-  //   setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
-  // };
 
   const toggleTheme = async () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';

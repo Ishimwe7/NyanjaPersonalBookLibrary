@@ -1,14 +1,15 @@
-// src/components/SettingsScreen.tsx
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { List, Switch } from 'react-native-paper';
 import { setSortBy, setTheme } from '../redux/slices/settingsSlice';
 import { RootState } from '../redux/types';
+import { useTheme } from './ThemeContext';
 
 const SettingsScreen: React.FC = () => {
+  const { theme, toggleTheme } = useTheme();
   const dispatch = useDispatch();
-  const { sortBy, theme } = useSelector((state: RootState) => state.settings);
+  const { sortBy } = useSelector((state: RootState) => state.settings);
 
   const handleSortByChange = (newSortBy: 'title' | 'author' | 'rating') => {
     dispatch(setSortBy(newSortBy));
@@ -16,38 +17,94 @@ const SettingsScreen: React.FC = () => {
 
   const handleThemeChange = () => {
     dispatch(setTheme(theme === 'light' ? 'dark' : 'light'));
+    toggleTheme();
   };
 
   return (
-    <View>
+    <View style={styles[theme].container}>
       <List.Section>
-        <List.Subheader>Sort books by</List.Subheader>
+        <List.Subheader style={styles[theme].text}>Sort books by</List.Subheader>
         <List.Item
           title="Title"
-          left={() => <List.Icon icon="sort-alphabetical-ascending" />}
+          titleStyle={styles[theme].listItemText}
+          left={() => <List.Icon icon="sort-alphabetical-ascending" color={styles[theme].text.color} />}
           onPress={() => handleSortByChange('title')}
-          right={() => sortBy === 'title' && <List.Icon icon="check" />}
+          right={() => sortBy === 'title' && <List.Icon icon="check" color={styles[theme].text.color} />}
         />
         <List.Item
           title="Author"
-          left={() => <List.Icon icon="account" />}
+          titleStyle={styles[theme].listItemText}
+          left={() => <List.Icon icon="account" color={styles[theme].text.color} />}
           onPress={() => handleSortByChange('author')}
-          right={() => sortBy === 'author' && <List.Icon icon="check" />}
+          right={() => sortBy === 'author' && <List.Icon icon="check" color={styles[theme].text.color} />}
         />
         <List.Item
           title="Rating"
-          left={() => <List.Icon icon="star" />}
+          titleStyle={styles[theme].listItemText}
+          left={() => <List.Icon icon="star" color={styles[theme].text.color} />}
           onPress={() => handleSortByChange('rating')}
-          right={() => sortBy === 'rating' && <List.Icon icon="check" />}
+          right={() => sortBy === 'rating' && <List.Icon icon="check" color={styles[theme].text.color} />}
         />
       </List.Section>
-      <List.Item
-        title="Dark Mode"
-        left={() => <List.Icon icon={theme === 'light' ? 'brightness-5' : 'brightness-3'} />}
-        right={() => <Switch value={theme === 'dark'} onValueChange={handleThemeChange} />}
-      />
+
+      <View style={styles[theme].themeToggler}>
+        <Text style={styles[theme].text}>
+          {theme === 'light' ? 'Light Mode' : 'Dark Mode'}
+        </Text>
+        <Switch
+          value={theme === 'dark'}
+          onValueChange={handleThemeChange}
+          trackColor={{ false: "#767577", true: "#81b0ff" }} 
+          thumbColor={theme === 'dark' ? "#f4f3f4" : "#f4f3f4"}
+        />
+      </View>
     </View>
   );
 };
 
 export default SettingsScreen;
+
+const styles = {
+  light: StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      padding: 16,
+    },
+    themeToggler: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: 16,
+      borderRadius: 10,
+      marginTop: 16,
+    },
+    text: {
+      color: '#000',
+    },
+    listItemText: {
+      color:'#000',
+    }
+  }),
+  dark: StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#000',
+      padding: 16,
+    },
+    themeToggler: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: 16,
+      borderRadius: 10,
+      marginTop: 16,
+    },
+    text: {
+      color: '#fff',
+    },
+    listItemText: {
+      color:'#fff',
+    }
+  }),
+};
