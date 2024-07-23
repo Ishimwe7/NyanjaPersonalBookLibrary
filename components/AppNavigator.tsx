@@ -13,7 +13,7 @@ export default function AppNavigator() {
     <ThemeProvider>
        <Drawer.Navigator
         drawerContent={(props) => <CustomDrawerContent {...props} />}
-        screenOptions={{ drawerStyle: { width: 200 } }}
+        screenOptions={{ drawerStyle: { width: 200 },headerShown: false }}
       >
         <Drawer.Screen
           name="MainTabs"

@@ -67,6 +67,7 @@ const AddBook: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={styles[theme].container}>
+      <Text style={styles[theme].title}>Add new Book</Text>
       <TextInput
         label="Title"
         value={title}
@@ -149,6 +150,7 @@ const styles = {
       flexGrow: 1,
       backgroundColor: '#fff',
       padding: 16,
+      paddingTop:40
     },
     input: {
       marginBottom: 16,
@@ -174,12 +176,21 @@ const styles = {
       marginVertical: 16,
       alignSelf: 'center',
     },
+    title: {
+    fontSize: 24, 
+    textAlign:'center',
+    fontWeight: 'bold', 
+    padding:20,
+    color:'#000'
+     
+  },
   }),
   dark: StyleSheet.create({
     container: {
       flexGrow: 1,
       backgroundColor: '#000',
       padding: 16,
+      paddingTop:40
     },
     input: {
       marginBottom: 16,
@@ -209,6 +220,13 @@ const styles = {
       marginVertical: 16,
       alignSelf: 'center',
     },
+    title: {
+    fontSize: 24, 
+    textAlign:'center',
+    fontWeight: 'bold', 
+    padding:20,
+    color:'#fff'
+  },
   }),
 };
 

@@ -11,6 +11,7 @@ import AddBook from './AddBook';
 import SettingsScreen from './Settings';
 import { createStackNavigator } from '@react-navigation/stack';
 import BookDetail from './BookDetails';
+import Settings from './Settings';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 const Stack = createStackNavigator();
@@ -59,7 +60,7 @@ export default function TabBasedNavigation() {
         },
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
-        headerTitle: '',
+        headerTitle:'',
         headerLeft: () => <CustomHeader />,
       })}
     >
@@ -76,7 +77,7 @@ export default function TabBasedNavigation() {
       </Tab.Screen>
        <Tab.Screen
         name="Settings"
-        component={SettingsScreen}
+        component={Settings}
         options={{ tabBarLabel: 'Settings' }}
       >
       </Tab.Screen>

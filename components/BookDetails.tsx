@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Button, Dialog, Portal, TextInput, Switch } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../redux/hooks/reduxHooks';
-import { deleteBook, readBook, updateBook } from '../redux/slices/bookSlice';
+import { deleteBook, editImage, readBook, updateBook } from '../redux/slices/bookSlice';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import { useTheme } from './ThemeContext';
+import * as ImagePicker from 'expo-image-picker';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 type BookDetailRouteProp = RouteProp<{ BookDetail: { bookId: number } }, 'BookDetail'>;
 
@@ -27,6 +29,7 @@ const BookDetail: React.FC = () => {
   const [titleError, setTitleError] = useState<string | null>(null);
   const [authorError, setAuthorError] = useState<string | null>(null);
   const [ratingError, setRatingError] = useState<string | null>(null);
+  const [newImage, setNewImage] = useState('');
 
   const validateInputs = () => {
     let isValid = true;
@@ -112,11 +115,61 @@ const BookDetail: React.FC = () => {
     }
   };
 
+   const handleSelectImage = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert('Permission to access camera roll is required!');
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync();
+    if (!result.canceled) {
+      setNewImage(result.assets[0].uri);
+     }
+     if (book && newImage) {
+      const updatedBook = { ...book, image: newImage };
+      dispatch(editImage(updatedBook))
+        .unwrap()
+        .then(() => {
+          Toast.show({
+            type: 'success',
+            position: 'bottom',
+            text1: 'Image Updated',
+            text2: 'The book image has been updated successfully.',
+          });
+          setImage(newImage);
+        })
+        .catch(() => {
+          Toast.show({
+            type: 'error',
+            position: 'bottom',
+            text1: 'Update Failed',
+            text2: 'Failed to update the book image.',
+          });
+        });
+     } else {
+        Toast.show({
+            type: 'error',
+            position: 'bottom',
+            text1: 'Update Failed',
+            text2: 'Failed to update the book image.',
+          });
+    }
+  };
+
   if (!book) return null;
 
   return (
     <ScrollView contentContainerStyle={styles[theme].container}>
-      {book.image && <Image source={{ uri: book.image }} style={styles[theme].image} />}
+          {image && (
+        <View style={styles[theme].imageContainer}>
+          <Image source={{ uri: image }} style={styles[theme].image} />
+          <TouchableOpacity style={styles[theme].editIcon} onPress={handleSelectImage}>
+            <Icon name="pencil" size={30} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      )}
+      {/* {book.image && <Image source={{ uri: book.image }} style={styles[theme].image} />} */}
       <Text style={styles[theme].title}>{book.title}</Text>
       <Text style={styles[theme].author}>by {book.author}</Text>
       <Text style={styles[theme].rating}>Rating: {book.rating}/5</Text>
@@ -208,8 +261,8 @@ const BookDetail: React.FC = () => {
             {ratingError && <Text style={styles[theme].errorText}>{ratingError}</Text>}
           </Dialog.Content>
           <Dialog.Actions>
-            <Button textColor={theme=='light'?'#fff':'#000'} onPress={() => setEditDialogVisible(false)}>Cancel</Button>
-            <Button textColor={theme=='light'?'#fff':'#000'} onPress={handleSave}>Save</Button>
+            <Button textColor={theme=='light'?'#000':'#000'} onPress={() => setEditDialogVisible(false)}>Cancel</Button>
+            <Button textColor={theme=='light'?'#000':'#000'} onPress={handleSave}>Save</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -221,8 +274,8 @@ const BookDetail: React.FC = () => {
             <Text>Are you sure you want to delete this book?</Text>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button textColor={theme=='light'?'#fff':'#000'} onPress={() => setDeleteDialogVisible(false)}>Cancel</Button>
-            <Button textColor={theme=='light'?'#fff':'#000'} onPress={handleDelete}>Delete</Button>
+            <Button textColor={theme=='light'?'#000':'#000'} onPress={() => setDeleteDialogVisible(false)}>Cancel</Button>
+            <Button textColor={theme=='light'?'#000':'#000'} onPress={handleDelete}>Delete</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -297,6 +350,20 @@ const styles = {
       flexDirection: 'row',
       marginBottom: 8,
     },
+     imageContainer: {
+      position: 'relative',
+      alignItems: 'center',
+    },
+    editIcon: {
+      position: 'absolute',
+      top: 10,
+      right: 50,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      borderRadius: 50,
+      width: 40, 
+      height: 40,
+      padding: 5,
+    },
   }),
   dark: StyleSheet.create({
     container: {
@@ -363,6 +430,20 @@ const styles = {
     starContainer: {
       flexDirection: 'row',
       marginBottom: 8,
+    },
+      imageContainer: {
+      position: 'relative',
+      alignItems: 'center',
+    },
+    editIcon: {
+      position: 'absolute',
+      top: 10,
+      right: 50,
+      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      borderRadius: 50,
+      padding: 5,
+      width: 40, 
+      height: 40,
     },
   }),
 };

@@ -6,6 +6,7 @@ import {
   updateBook as updateBookInDB,
   markBookAsRead,
   deleteBook as deleteBookFromDB,
+  editImage as editImageFromDB,
 } from "@/data-persistance/sqliteconfig";
 
 interface BooksState {
@@ -50,6 +51,13 @@ export const readBook = createAsyncThunk(
     return book;
   }
 );
+export const editImage = createAsyncThunk(
+  "books/editImage",
+  async (book: Book) => {
+    await editImage(book);
+    return book;
+  }
+);
 
 // Thunk to delete a book from the database
 export const deleteBook = createAsyncThunk(
@@ -89,6 +97,14 @@ const booksSlice = createSlice({
         }
       })
       .addCase(readBook.fulfilled, (state, action: PayloadAction<Book>) => {
+        const index = state.items.findIndex(
+          (book) => book.id === action.payload.id
+        );
+        if (index !== -1) {
+          state.items[index] = action.payload;
+        }
+      })
+      .addCase(editImage.fulfilled, (state, action: PayloadAction<Book>) => {
         const index = state.items.findIndex(
           (book) => book.id === action.payload.id
         );

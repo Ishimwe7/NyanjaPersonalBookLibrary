@@ -6,7 +6,7 @@ import { setSortBy, setTheme } from '../redux/slices/settingsSlice';
 import { RootState } from '../redux/types';
 import { useTheme } from './ThemeContext';
 
-const SettingsScreen: React.FC = () => {
+const Settings: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const dispatch = useDispatch();
   const { sortBy } = useSelector((state: RootState) => state.settings);
@@ -22,6 +22,7 @@ const SettingsScreen: React.FC = () => {
 
   return (
     <View style={styles[theme].container}>
+      <Text style={styles[theme].title}>Settings</Text>
       <List.Section>
         <List.Subheader style={styles[theme].text}>Sort books by</List.Subheader>
         <List.Item
@@ -62,7 +63,7 @@ const SettingsScreen: React.FC = () => {
   );
 };
 
-export default SettingsScreen;
+export default Settings;
 
 const styles = {
   light: StyleSheet.create({
@@ -84,7 +85,14 @@ const styles = {
     },
     listItemText: {
       color:'#000',
-    }
+    },
+    title: {
+    fontSize: 24, 
+    textAlign:'center',
+    fontWeight: 'bold', 
+    padding:20,
+    color:'#000'
+  },
   }),
   dark: StyleSheet.create({
     container: {
@@ -105,6 +113,13 @@ const styles = {
     },
     listItemText: {
       color:'#fff',
-    }
+    },
+     title: {
+    fontSize: 24, 
+    textAlign:'center',
+    fontWeight: 'bold', 
+    padding:20,
+    color:'#fff'
+  },
   }),
 };

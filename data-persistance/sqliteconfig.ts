@@ -21,6 +21,8 @@ export const getDBConnection = async () => {
 const addBook = async (book) => {
   try {
     const db = await getDBConnection();
+    console.log("DB: ", db);
+    console.log("Book: ", book);
     const { title, author, rating, isRead, image } = book;
     const result = await db.runAsync(
       "INSERT INTO books (title, author, rating, isRead, image) VALUES (?, ?, ?, ?,?)",
@@ -53,6 +55,19 @@ const markBookAsRead = async (book: Book) => {
     const result = await db.runAsync(
       "UPDATE books SET isRead = ? WHERE id = ?",
       [book.isRead, book.id]
+    );
+    console.log("Number of rows updated:", result.changes);
+  } catch (error) {
+    console.log("An error occurred: ", error);
+    throw error;
+  }
+};
+const editImage = async (book: Book) => {
+  try {
+    const db = await getDBConnection();
+    const result = await db.runAsync(
+      "UPDATE books SET image = ? WHERE id = ?",
+      [book.image, book.id]
     );
     console.log("Number of rows updated:", result.changes);
   } catch (error) {
@@ -104,6 +119,7 @@ export {
   addBook,
   updateBook,
   markBookAsRead,
+  editImage,
   deleteBook,
   getBookById,
   getAllBooks,

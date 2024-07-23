@@ -461,6 +461,7 @@ const styles = {
     container: {
       flex: 1,
       backgroundColor: '#f5f5f5',
+      paddingBottom:60
     },
     header: {
       flexDirection: 'row',
@@ -557,13 +558,14 @@ const styles = {
     },
     listContainer: {
       padding: 10,
-      flexGrow:1
+      flexGrow: 1,
     },
   }),
   dark: StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#1e1e1e',
+      paddingBottom:60
     },
     header: {
       flexDirection: 'row',
@@ -662,7 +664,6 @@ const styles = {
     listContainer: {
       padding: 10,
       flexGrow: 1,
-      paddingBottom:60
     },
   })
 };
